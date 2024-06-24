@@ -50,4 +50,4 @@ ggsave("country-pop.png", country_pop, width = 10, height = 10, units = "in")
 knitr::include_graphics("country-pop.png")
 ```
 
-This project displays a bar graph that displays the populations over multiple years for the 10 most populated countries in 2024. Each country has seven bars (each a different color), representing the years 1980, 2000, 2010, 2023, 2024, 2030, and 2050. The populations for 2030 and 2050 are projections. The tidyverse library is utilized to make an amazing plot. The ColorBrewer palette "Set1" is also used to make visually appealing bars.
+Two major countries will decline in population in future years. The data used to create this project came from Kaggle. The data for countries and populations of those countries were mapped in the form of a bar graph to show how the populations changed over time. China and Russia are expected to decline in population in 2030 and 2050.
