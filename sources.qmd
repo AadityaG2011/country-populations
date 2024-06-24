@@ -1,0 +1,6 @@
+---
+title: "Sources"
+format: html
+---
+
+The data used to create this project came from [Kaggle](https://www.kaggle.com/datasets/mjdskaggle/2024-population-projections-by-country). ChatGPT helped in creating the code for the graph. The tidyverse library was used in this project to make the graph and more. All the observations besides the 10 with the highest 2024 population were removed (using the slice_head function) since there were way too many observations to graph without removing any.

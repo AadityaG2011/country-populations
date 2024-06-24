@@ -1,0 +1,53 @@
+---
+title: "Country Populations Plot"
+execute: 
+  echo: false
+---
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+```
+
+```{r}
+#| label: plot
+
+# Makes a variable for the data
+original_data <- read_csv("2024Populations.csv", show_col_types = FALSE)
+
+# Takes only the 10 most populated countries in 2024 (slice_head), then reorders it so that the data is ascending (mutate 1), then takes the population columns and makes them each a row (pivot_longer and mutate 2).
+plot_data <- original_data |>
+  slice_head(n = 10) |>
+    mutate(country = fct_reorder(country, pop2024, .desc = FALSE)) |>
+      pivot_longer(cols = starts_with("pop"), names_to = "year", values_to = "population") |>
+        mutate(year = str_replace(year, "pop", ""))
+
+# Makes the actual bar plot (ggplot and geom_bar), changes the x-axis labels to comma format (scale_x_continuous), changes the bar colors (scale_fill_brewer), adds labels like a title, subtitle, etc. (labs), and changes the theme (theme_minimal).
+# Not adding caption in labs() because there will be a separate "Sources" page.
+country_pop <- ggplot(plot_data, aes(x = population, y = country, fill = year)) +
+  geom_bar(stat = "identity", position = "dodge") +
+    scale_x_continuous(labels = scales::comma_format()) +
+      scale_fill_brewer(palette = "Set1") +
+        labs(title = "Country Populations for 10 Most Populated Countries in 2024",
+             subtitle = "Only China and Russia have a projected population decrease for 2030 and 2050",
+             x = "Population",
+             y = "Country",
+             fill = "Year") +
+          theme_minimal() +
+            theme(plot.title = element_text(size = 20),
+                  plot.subtitle = element_text(size = 15),
+                  legend.text = element_text(size = 12),
+                  legend.title = element_text(size = 12),
+                  axis.text = element_text(size = 12),
+                  axis.title = element_text(size = 12))
+
+# Saved graph as a png file
+ggsave("country-pop.png", country_pop, width = 10, height = 10, units = "in")
+
+# Displayed graph on website
+knitr::include_graphics("country-pop.png")
+```
+
+This project displays a bar graph that displays the populations over multiple years for the 10 most populated countries in 2024. Each country has seven bars (each a different color), representing the years 1980, 2000, 2010, 2023, 2024, 2030, and 2050. The populations for 2030 and 2050 are projections. The tidyverse library is utilized to make an amazing plot. The ColorBrewer palette "Set1" is also used to make visually appealing bars.
