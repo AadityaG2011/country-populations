@@ -1,0 +1,51 @@
+---
+title: "Plot 2"
+execute: 
+  echo: false
+---
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+```
+
+```{r}
+#| label: plot
+
+# Makes a variable for the data.
+original_data <- read_csv("2024Populations.csv", show_col_types = FALSE)
+
+# Selects only the 4 necessary variables (select) and takes the top 25 (slice_head).
+scatter_data <- original_data |>
+  select(country, Density_2024, landAreaKm, pop2024) |>
+    slice_head(n = 35)
+
+# Creates the scatter plot (ggplot and geom_point), made points bigger (scale_size), added labels (labs), changed theme (theme_minimal)
+country_scatter <- ggplot(scatter_data, aes(x = landAreaKm, y = Density_2024, size = pop2024, color = country)) +
+  geom_point(alpha = 0.3) +
+    scale_size(range = c(5, 50), labels = scales::comma_format()) +
+      scale_x_continuous(labels = scales::comma_format()) +
+      labs(title = "Population Density vs. Land Area",
+           x = "Land Area (km²)",
+           y = "Density (people per km²)",
+           size = "Population in 2024",
+          color = "Country") +
+        theme_minimal() +
+          theme(plot.title = element_text(size = 50),
+                plot.subtitle = element_text(size = 45),
+                legend.text = element_text(size = 40),
+                legend.title = element_text(size = 40),
+                axis.text = element_text(size = 40),
+                axis.title = element_text(size = 40)) +
+            guides(color = guide_legend(override.aes = list(size = 15)))
+
+# Saved graph as a png file.
+ggsave("country-scatter.png", country_scatter, width = 25, height = 16, units = "in")
+
+# Displayed graph on website.
+knitr::include_graphics("country-scatter.png")
+```
+
+In the scatter plot, we can see that the points form a curve shape. The curve tells us that usually, the higher the land area of a country, the lower the population density. We can see that Bangladesh has the highest population density out of the 35 countries on the plot at around 1,350 people per square kilometer. Russia has the highest land area at 16 million square kilometers!
