@@ -17,17 +17,18 @@ library(tidyverse)
 # Makes a variable for the data.
 original_data <- read_csv("2024Populations.csv", show_col_types = FALSE)
 
-# Selects only the 4 necessary variables (select) and takes the top 25 (slice_head).
+# Selects only the 4 necessary variables (select) and takes the top 35 (slice_head).
 scatter_data <- original_data |>
   select(country, Density_2024, landAreaKm, pop2024) |>
     slice_head(n = 35)
 
-# Creates the scatter plot (ggplot and geom_point), made points bigger (scale_size), added labels (labs), changed theme (theme_minimal)
+# Creates the scatter plot (ggplot and geom_point), made points bigger (scale_size), made x-axis labels into comma format (scale_x_continuous), added labels (labs), changed theme (theme_minimal), made text larger (theme), made dots in legend larger (guides).
 country_scatter <- ggplot(scatter_data, aes(x = landAreaKm, y = Density_2024, size = pop2024, color = country)) +
   geom_point(alpha = 0.3) +
     scale_size(range = c(5, 50), labels = scales::comma_format()) +
       scale_x_continuous(labels = scales::comma_format()) +
-      labs(title = "Population Density vs. Land Area",
+      labs(title = "Population Density, Land Area, and Population in 2024 of Top 35 Populated\nCountries",
+           subtitle = "The points are in the shape of a curve",
            x = "Land Area (km²)",
            y = "Density (people per km²)",
            size = "Population in 2024",
@@ -42,7 +43,7 @@ country_scatter <- ggplot(scatter_data, aes(x = landAreaKm, y = Density_2024, si
             guides(color = guide_legend(override.aes = list(size = 15)))
 
 # Saved graph as a png file.
-ggsave("country-scatter.png", country_scatter, width = 25, height = 16, units = "in")
+ggsave("country-scatter.png", country_scatter, width = 25, height = 18, units = "in")
 
 # Displayed graph on website.
 knitr::include_graphics("country-scatter.png")
